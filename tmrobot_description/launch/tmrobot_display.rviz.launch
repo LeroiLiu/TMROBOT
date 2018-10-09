@@ -21,7 +21,9 @@
     </node>
 
   <!-- push table_description to factory and spawn robot in gazebo -->
-  <node name="spawn_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -z 0.01 -model table_model" respawn="false" output="screen" />
+<!--   <node name="spawn_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -z 0.01 -model table_model" respawn="false" output="screen" /> -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-urdf -model robot1 -param robot_description -z 0.05"/>
 
 <!-- 
     
