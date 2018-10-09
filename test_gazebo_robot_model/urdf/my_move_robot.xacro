@@ -17,12 +17,13 @@
 		</inertial>
 	</xacro:macro>
 
+
 	<link name="base_footprint">
 		<visual>
 			<geometry>
-				<box size="0.001 0.001 0.001"/>
+				<cylinder length=".01" radius="0.117"/>
 			</geometry>
-			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<origin rpy="0 0 1.57075" xyz="0 0 0"/> 
 		</visual>
 		<xacro:default_inertial mass="0.0001"/>
 	</link>
@@ -35,16 +36,16 @@
 	<link name="base_link">
 		<visual>
 			<geometry>
-				<box size="0.2 .3 .1"/>
+				<cylinder length="0.001" radius="0.001"/>
 			</geometry>
-			<origin rpy="0 0 1.54" xyz="0 0 0.05"/>
+			<origin rpy="0 0 1.57075" xyz="0 0 0"/> 
 			<material name="white">
 				<color rgba="1 1 1 1"/>
 			</material>
 		</visual>
 		<collision>
 			<geometry>
-				<box size="0.2 .3 0.1"/>
+				<cylinder length="0.001" radius="0.001"/>
 			</geometry>
 		</collision>
 		<xacro:default_inertial mass="10"/>
@@ -53,17 +54,17 @@
 	<link name="wheel_1">
 		<visual>
 			<geometry>
-				<cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+				<cylinder length=".02" radius="0.029"/> 
 			</geometry>
 			<!-- <origin rpy="0 1.5 0" xyz="0.1 0.1 0"/> -->
-			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<origin rpy="0 0 1.57075" xyz="0 0 0"/>
 			<material name="black">
 				<color rgba="0 0 0 1"/>
 			</material>
 		</visual>
 		<collision>
 			<geometry>
-				<cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+				<cylinder length=".02" radius="0.029"/> 
 			</geometry>
 		</collision>
 		<xacro:default_inertial mass="1"/>
@@ -72,15 +73,15 @@
 	<link name="wheel_2">
 		<visual>
 			<geometry>
-				<cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+				<cylinder length=".02" radius="0.029"/>
 			</geometry>
 			<!-- <origin rpy="0 1.5 0" xyz="-0.1 0.1 0"/> -->
-			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<origin rpy="0 0 1.57075" xyz="0 0 0"/>
 			<material name="black"/>
 		</visual>
 		<collision>
 			<geometry>
-				<cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+				<cylinder length=".02" radius="0.029"/>
 			</geometry>
 		</collision>
 		<xacro:default_inertial mass="1"/>
@@ -89,15 +90,15 @@
 	<link name="wheel_3">
 		<visual>
 			<geometry>
-				<cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+				<cylinder length=".02" radius="0.029"/>
 			</geometry>
 			<!-- <origin rpy="0 1.5 0" xyz="0.1 -0.1 0"/> -->
-			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<origin rpy="0 0 1.57075" xyz="0 0 0"/>
 			<material name="black"/>
 		</visual>
 		<collision>
 			<geometry>
-				<cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+				<cylinder length=".02" radius="0.029"/>
 			</geometry>
 		</collision>
 		<xacro:default_inertial mass="1"/>
@@ -106,7 +107,7 @@
 	<link name="wheel_4">
 		<visual>
 			<geometry>
-				<cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+				<cylinder length="0.00001" radius="0.00001"/>
 			</geometry>
 			<!--    <origin rpy="0 1.5 0" xyz="-0.1 -0.1 0"/> -->
 			<origin rpy="0 0 0" xyz="0 0 0" />
@@ -124,7 +125,7 @@
 	<joint name="base_to_wheel1" type="continuous">
 		<parent link="base_link"/>
 		<child link="wheel_1"/>
-		<origin rpy="1.5707 0 0" xyz="0.1 0.15 0"/>
+		<origin rpy="1.57075 1.57075 0" xyz="0.117 0 -0.024"/> 
 		<axis xyz="0 0 1" />
 	</joint>
 
@@ -134,14 +135,14 @@
 		<limit effort="100" velocity="100" />
 		<parent link="base_link"/>
 		<child link="wheel_2"/>
-		<origin rpy="1.5707 0 0" xyz="-0.1 0.15 0"/>
+		<origin rpy="1.57075 1.57075 0" xyz="-0.0585 0.1013 -0.024"/>  
 	</joint>
 
 	<joint name="base_to_wheel3" type="continuous">
 		<parent link="base_link"/>
 		<axis xyz="0 0 1" />
 		<child link="wheel_3"/>
-		<origin rpy="1.5707 0 0" xyz="0.1 -0.15 0"/>
+		<origin rpy="1.57075 1.57075 0" xyz="-0.0585 -0.1013 -0.024"/>  
 	</joint>
 
 	<joint name="base_to_wheel4" type="continuous">
