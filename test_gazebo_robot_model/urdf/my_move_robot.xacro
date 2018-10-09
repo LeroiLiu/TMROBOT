@@ -6,8 +6,11 @@
 		xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
 		name="robot1_xacro">
 
-	<xacro:property name="length_wheel" value="0.05" />
-	<xacro:property name="radius_wheel" value="0.05" />
+
+	<property name="M_PI" value="3.1415926535897931"/>
+	<property name="base_radius" value="0.117" />
+	<property name="cube_2" value="1.414213562" />
+
 	<xacro:macro name="default_inertial" params="mass">
 		<inertial>
 		<mass value="${mass}" />
@@ -17,41 +20,7 @@
 		</inertial>
 	</xacro:macro>
 
-
-	<link name="base_footprint">
-		<visual>
-			<geometry>
-				<cylinder length=".01" radius="0.117"/>
-			</geometry>
-			<origin rpy="0 0 1.57075" xyz="0 0 0"/> 
-		</visual>
-		<xacro:default_inertial mass="0.0001"/>
-	</link>
-	<joint name="base_footprint_joint" type="fixed">
-		<origin xyz="0 0 0" />
-		<parent link="base_footprint" />
-		<child link="base_link" />
-	</joint>
-
-	<link name="base_link">
-		<visual>
-			<geometry>
-				<cylinder length="0.001" radius="0.001"/>
-			</geometry>
-			<origin rpy="0 0 1.57075" xyz="0 0 0"/> 
-			<material name="white">
-				<color rgba="1 1 1 1"/>
-			</material>
-		</visual>
-		<collision>
-			<geometry>
-				<cylinder length="0.001" radius="0.001"/>
-			</geometry>
-		</collision>
-		<xacro:default_inertial mass="10"/>
-	</link>
-
-	<link name="wheel_1">
+	<xacro:macro name="default_wheel">
 		<visual>
 			<geometry>
 				<cylinder length=".02" radius="0.029"/> 
@@ -67,89 +36,84 @@
 				<cylinder length=".02" radius="0.029"/> 
 			</geometry>
 		</collision>
-		<xacro:default_inertial mass="1"/>
-	</link>
+	</xacro:macro>
 
-	<link name="wheel_2">
+	<xacro:macro name="default_base_link">
 		<visual>
 			<geometry>
-				<cylinder length=".02" radius="0.029"/>
+				<cylinder length=".01" radius="${base_radius}"/>
 			</geometry>
-			<!-- <origin rpy="0 1.5 0" xyz="-0.1 0.1 0"/> -->
-			<origin rpy="0 0 1.57075" xyz="0 0 0"/>
-			<material name="black"/>
+			<origin rpy="0 0 1.57075" xyz="0 0 0"/> 
+			<material name="white">
+				<color rgba="1 1 1 1"/>
+			</material>
 		</visual>
 		<collision>
 			<geometry>
-				<cylinder length=".02" radius="0.029"/>
+				<cylinder length=".01" radius="${base_radius}"/>
 			</geometry>
 		</collision>
-		<xacro:default_inertial mass="1"/>
+	</xacro:macro>
+
+	<link name="base_link">
+		<xacro:default_base_link />
+		<xacro:default_inertial mass="10"/>
 	</link>
 
-	<link name="wheel_3">
-		<visual>
-			<geometry>
-				<cylinder length=".02" radius="0.029"/>
-			</geometry>
-			<!-- <origin rpy="0 1.5 0" xyz="0.1 -0.1 0"/> -->
-			<origin rpy="0 0 1.57075" xyz="0 0 0"/>
-			<material name="black"/>
-		</visual>
-		<collision>
-			<geometry>
-				<cylinder length=".02" radius="0.029"/>
-			</geometry>
-		</collision>
-		<xacro:default_inertial mass="1"/>
+	<link name="right_front_wheel">
+		<xacro:default_wheel />
+		<xacro:default_inertial mass="0.01"/>
 	</link>
 
-	<link name="wheel_4">
-		<visual>
-			<geometry>
-				<cylinder length="0.00001" radius="0.00001"/>
-			</geometry>
-			<!--    <origin rpy="0 1.5 0" xyz="-0.1 -0.1 0"/> -->
-			<origin rpy="0 0 0" xyz="0 0 0" />
-			<material name="black"/>
-		</visual>
-		<collision>
-			<geometry>
-				<cylinder length="${length_wheel}" radius="${radius_wheel}"/>
-			</geometry>
-		</collision>
-		<xacro:default_inertial mass="1"/>
+	<link name="right_back_wheel">
+		<xacro:default_wheel />
+		<xacro:default_inertial mass="0.01"/>
 	</link>
 
+	<link name="left_front_wheel">
+		<xacro:default_wheel />
+		<xacro:default_inertial mass="0.01"/>
+	</link>
 
-	<joint name="base_to_wheel1" type="continuous">
+	<link name="left_back_wheel">
+		<xacro:default_wheel />
+		<xacro:default_inertial mass="0.01"/>
+	</link>
+
+	<joint name="right_front_wheel_joint" type="continuous">
 		<parent link="base_link"/>
-		<child link="wheel_1"/>
-		<origin rpy="1.57075 1.57075 0" xyz="0.117 0 -0.024"/> 
+		<child link="right_front_wheel"/>
+		<origin rpy="0 ${M_PI/2} 0" xyz="${base_radius/cube_2} ${base_radius/cube_2} -0.024"/> 
 		<axis xyz="0 0 1" />
+		<limit effort="100" velocity="100"/>
+		<joint_properties damping="0.0" friction="0.0"/>
 	</joint>
 
-	<joint name="base_to_wheel2" type="continuous">
+	<joint name="right_back_wheel_joint" type="continuous">
 		<axis xyz="0 0 1" />
-		<anchor xyz="0 0 0" />
-		<limit effort="100" velocity="100" />
 		<parent link="base_link"/>
-		<child link="wheel_2"/>
-		<origin rpy="1.57075 1.57075 0" xyz="-0.0585 0.1013 -0.024"/>  
+		<child link="right_back_wheel"/>
+		<origin rpy="0 ${M_PI/2} 0" xyz="${base_radius/cube_2} ${-base_radius/cube_2} -0.024"/> 
+		<limit effort="100" velocity="100"/>
+		<joint_properties damping="0.0" friction="0.0"/>
 	</joint>
 
-	<joint name="base_to_wheel3" type="continuous">
+	<joint name="left_front_wheel_joint" type="continuous">
 		<parent link="base_link"/>
 		<axis xyz="0 0 1" />
-		<child link="wheel_3"/>
-		<origin rpy="1.57075 1.57075 0" xyz="-0.0585 -0.1013 -0.024"/>  
+		<child link="left_front_wheel"/>
+		<origin rpy="0 ${M_PI/2} 0" xyz="${-base_radius/cube_2} ${base_radius/cube_2} -0.024"/>
+		<limit effort="100" velocity="100"/>
+		<joint_properties damping="0.0" friction="0.0"/>
 	</joint>
 
-	<joint name="base_to_wheel4" type="continuous">
+	<joint name="left_back_wheel_joint" type="continuous">
 		<parent link="base_link"/>
 		<axis xyz="0 0 1" />
-		<child link="wheel_4"/>
-		<origin rpy="1.5707 0 0" xyz="-0.1 -0.15 0"/>
+		<child link="left_back_wheel"/>
+		<origin rpy="0 ${M_PI/2} 0" xyz="${-base_radius/cube_2} ${-base_radius/cube_2} -0.024"/>
+		<limit effort="100" velocity="100"/>
+		<joint_properties damping="0.0" friction="0.0"/>
 	</joint>
 
 	<!-- Drive controller -->
@@ -157,15 +121,15 @@
 	  <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
 	    <updateRate>100.0</updateRate>
 	    <robotNamespace></robotNamespace>
-	    <leftFrontJoint>base_to_wheel1</leftFrontJoint>
-	    <rightFrontJoint>base_to_wheel3</rightFrontJoint>
-	    <leftRearJoint>base_to_wheel2</leftRearJoint>
-	    <rightRearJoint>base_to_wheel4</rightRearJoint>
+	    <leftFrontJoint>left_front_wheel_joint</leftFrontJoint>
+	    <rightFrontJoint>right_front_wheel_joint</rightFrontJoint>
+	    <leftRearJoint>left_back_wheel_joint</leftRearJoint>
+	    <rightRearJoint>right_back_wheel_joint</rightRearJoint>
 	    <wheelSeparation>4</wheelSeparation>
 	    <wheelDiameter>0.1</wheelDiameter>
 	    <commandTopic>cmd_vel</commandTopic>
 	    <odometryTopic>odom</odometryTopic>
-	    <robotBaseFrame>base_footprint</robotBaseFrame>
+	    <robotBaseFrame>base_link</robotBaseFrame>
 	    <odometryFrame>odom</odometryFrame>
 	    <torque>1</torque>
 	    <topicName>cmd_vel</topicName>
