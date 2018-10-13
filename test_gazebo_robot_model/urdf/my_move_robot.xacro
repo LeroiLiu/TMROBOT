@@ -26,7 +26,7 @@
 				<cylinder length=".02" radius="0.029"/> 
 			</geometry>
 			<!-- <origin rpy="0 1.5 0" xyz="0.1 0.1 0"/> -->
-			<origin rpy="0 0 1.57075" xyz="0 0 0"/>
+			<origin rpy="0 0 ${M_PI/2}" xyz="0 0 0"/>
 			<material name="black">
 				<color rgba="0 0 0 1"/>
 			</material>
@@ -43,7 +43,7 @@
 			<geometry>
 				<cylinder length=".01" radius="${base_radius}"/>
 			</geometry>
-			<origin rpy="0 0 1.57075" xyz="0 0 0"/> 
+			<origin rpy="0 0 ${M_PI/2}" xyz="0 0 0"/> 
 			<material name="white">
 				<color rgba="1 1 1 1"/>
 			</material>
@@ -57,27 +57,27 @@
 
 	<link name="base_link">
 		<xacro:default_base_link />
-		<xacro:default_inertial mass="10"/>
+		<xacro:default_inertial mass="4"/>
 	</link>
 
 	<link name="right_front_wheel">
 		<xacro:default_wheel />
-		<xacro:default_inertial mass="0.01"/>
+		<xacro:default_inertial mass="1"/>
 	</link>
 
 	<link name="right_back_wheel">
 		<xacro:default_wheel />
-		<xacro:default_inertial mass="0.01"/>
+		<xacro:default_inertial mass="1"/>
 	</link>
 
 	<link name="left_front_wheel">
 		<xacro:default_wheel />
-		<xacro:default_inertial mass="0.01"/>
+		<xacro:default_inertial mass="1"/>
 	</link>
 
 	<link name="left_back_wheel">
 		<xacro:default_wheel />
-		<xacro:default_inertial mass="0.01"/>
+		<xacro:default_inertial mass="1"/>
 	</link>
 
 	<joint name="right_front_wheel_joint" type="continuous">
@@ -120,23 +120,22 @@
 	<gazebo>
 	  <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
 	    <updateRate>100.0</updateRate>
-	    <robotNamespace></robotNamespace>
+	    <robotNamespace>/</robotNamespace>
 	    <leftFrontJoint>left_front_wheel_joint</leftFrontJoint>
 	    <rightFrontJoint>right_front_wheel_joint</rightFrontJoint>
 	    <leftRearJoint>left_back_wheel_joint</leftRearJoint>
 	    <rightRearJoint>right_back_wheel_joint</rightRearJoint>
-	    <wheelSeparation>4</wheelSeparation>
-	    <wheelDiameter>0.1</wheelDiameter>
-	    <commandTopic>cmd_vel</commandTopic>
-	    <odometryTopic>odom</odometryTopic>
+	    <wheelSeparation>0.4</wheelSeparation>
+	    <wheelDiameter>0.215</wheelDiameter>
 	    <robotBaseFrame>base_link</robotBaseFrame>
-	    <odometryFrame>odom</odometryFrame>
-	    <torque>1</torque>
+	    <torque>20</torque>
+	    <commandTopic>cmd_vel</commandTopic>
 	    <topicName>cmd_vel</topicName>
+		<odometryTopic>odom</odometryTopic> 
+		<odometryFrame>odom</odometryFrame>
 	    <broadcastTF>1</broadcastTF>
 	  </plugin>
 	</gazebo>
-
 	<!-- ros_control plugin -->
 	<gazebo>
 		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
